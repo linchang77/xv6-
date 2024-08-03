@@ -10,6 +10,7 @@
 #define STACK_SIZE  8192
 #define MAX_THREAD  4
 
+//创建一个结构体存储上下文
 struct context {
   uint64 ra;
   uint64 sp;

@@ -7,7 +7,7 @@ void copy(char **p1, char *p2){
     *p1 = malloc(strlen(p2) + 1);
     strcpy(*p1, p2);
 }
-
+//用于读取标准输入的一行，将其拆分成多个参数
 // i为起始下标
 int readLine(char **pars, int i){
     int d = 1024;
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]){
         exit(1);
     }else{
         int i;
-        char *pars[MAXARG];
+        char *pars[MAXARG];      //复制每一个参数
         for (i = 1; i < argc; i++){
             copy(&pars[i - 1], argv[i]);
         }
@@ -74,7 +74,7 @@ int main(int argc, char *argv[]){
         while ((end = readLine(pars, argc - 1)) != -1){
             pars[end] = 0;
             if (fork() == 0){
-                exec(pars[0], pars);
+                exec(pars[0], pars);//pars[0]是重复执行的命令
                 exit(1);
             }else{
                 wait(0);

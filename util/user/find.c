@@ -3,6 +3,7 @@
 #include "user/user.h"
 #include "kernel/fs.h"
 
+//格式化路径
 char*
 fmtname(char *path)
 {
@@ -22,6 +23,7 @@ fmtname(char *path)
     return buf;
 }
 
+// 递归函数，用于遍历目录并找到符合条件的文件
 void find(char *path, char *filename){
     char buf[512], *p;
     
@@ -43,7 +45,7 @@ void find(char *path, char *filename){
     if (read(fd, &de, sizeof(de)) != sizeof(de)){
         exit(1);
     }
-
+    // 如果是目录，则递归遍历目录内容
     switch(st.type){
         case T_FILE:
             // 当前路径为文件, 直接判断

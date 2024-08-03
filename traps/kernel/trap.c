@@ -66,6 +66,7 @@ usertrap(void)
 
     syscall();
   } else if((which_dev = devintr()) != 0){
+    //修改部分
     if (which_dev == 2 && p->in_handler == 0) {
       p->ticks += 1;
       if ((p->ticks == p->interval) && (p->interval != 0)) {

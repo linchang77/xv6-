@@ -23,9 +23,12 @@ extern char trampoline[]; // trampoline.S
 void
 kvminit()
 {
+  //定义和初始化页表
+  //kvmmap() 函数用于将特定的物理地址映射到虚拟地址空间。
   kernel_pagetable = (pagetable_t) kalloc();
   memset(kernel_pagetable, 0, PGSIZE);
 
+  //为创建的页表设置内核映射
   // uart registers
   kvmmap(UART0, UART0, PGSIZE, PTE_R | PTE_W);
 
@@ -297,7 +300,7 @@ uvmdealloc(pagetable_t pagetable, uint64 oldsz, uint64 newsz)
   return newsz;
 }
 
-// Recursively free page-table pages.
+// Recursively free page-table pages.w
 // All leaf mappings must already have been removed.
 void
 freewalk(pagetable_t pagetable)
@@ -442,13 +445,14 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
 {
   return copyinstr_new(pagetable, dst, srcva, max);
 }
+//使用一个 for 循环遍历页表中的 512 个条目。
 
 void
 _helper_vmprint(pagetable_t pagetable, int level)
 {
   for(int i = 0; i < 512; i++){
     pte_t pte = pagetable[i];
-    if ((pte & PTE_V) && (pte & (PTE_R | PTE_W | PTE_X)) == 0) {
+    if ((pte & PTE_V) && (pte & (PTE_R | PTE_W | PTE_X)) == 0) { //这段说明这个条目指向下一级页表
       // this pte points to a valid lower level page table
       uint64 child = PTE2PA(pte);
       for (int j=0; j <= level; j++) {

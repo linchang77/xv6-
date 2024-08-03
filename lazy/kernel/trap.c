@@ -78,7 +78,7 @@ usertrap(void)
 	  p->killed = 1;
         } else if (mappages(p->pagetable, va, PGSIZE, (uint64)mem, PTE_W|PTE_X|PTE_R|PTE_U) != 0) {
           kfree((void*)mem);
-	  p->killed = 1;
+	  p->killed = 1;  //将程序标志为killed终止该进程
         }
       } else {
         p->killed = 1;

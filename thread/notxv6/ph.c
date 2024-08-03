@@ -113,7 +113,7 @@ main(int argc, char *argv[])
   tha = malloc(sizeof(pthread_t) * nthread);
   srandom(0);
   assert(NKEYS % nthread == 0);
-  for (int i=0; i<NBUCKET; i++) pthread_mutex_init(&lock[i], NULL);
+  for (int i=0; i<NBUCKET; i++) pthread_mutex_init(&lock[i], NULL);//声明多线程的锁，
   for (int i = 0; i < NKEYS; i++) {
     keys[i] = random();
   }

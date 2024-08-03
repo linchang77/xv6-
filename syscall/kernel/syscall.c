@@ -142,9 +142,9 @@ syscall(void)
 
   num = p->trapframe->a7;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
-    p->trapframe->a0 = syscalls[num]();
-    if((1<<num)&(p->tracemask))
-      printf("%d: syscall %s -> %d\n", p->pid, syscall_name[num-1], p->trapframe->a0);
+    p->trapframe->a0 = syscalls[num]();//将系统调用的返回值存放到a0寄存器
+    if((1<<num)&(p->tracemask))      //与掩码作比较
+      printf("%d: syscall %s -> %d\n", p->pid, syscall_name[num-1], p->trapframe->a0);//最后一个是返回寄存器a0的值
   } else {
     printf("%d %s: unknown sys call %d\n",
             p->pid, p->name, num);

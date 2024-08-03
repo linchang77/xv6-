@@ -30,14 +30,18 @@ barrier()
   // Block until all threads have called barrier() and
   // then increment bstate.round.
   //
+  // 获取屏障的互斥锁
   pthread_mutex_lock(&bstate.barrier_mutex);
-  bstate.nthread++;
+  bstate.nthread++;// 增加已到达屏障的线程数
+    // 如果所有线程都已到达屏障点
   if (bstate.nthread == nthread) {
     bstate.round++;
     bstate.nthread = 0;
+     // 唤醒所有在条件变量上等待的线程
     pthread_cond_broadcast(&bstate.barrier_cond);
     pthread_mutex_unlock(&bstate.barrier_mutex);
   } else {
+     // 如果还有线程未到达屏障点，当前线程等待在条件变量上
     pthread_cond_wait(&bstate.barrier_cond, &bstate.barrier_mutex);
     pthread_mutex_unlock(&bstate.barrier_mutex);
   }
@@ -78,9 +82,11 @@ main(int argc, char *argv[])
 
   barrier_init();
 
+// 创建 nthread 个线程，每个线程执行 thread 函数
   for(i = 0; i < nthread; i++) {
     assert(pthread_create(&tha[i], NULL, thread, (void *) i) == 0);
   }
+   // 等待所有线程完成
   for(i = 0; i < nthread; i++) {
     assert(pthread_join(tha[i], &value) == 0);
   }
